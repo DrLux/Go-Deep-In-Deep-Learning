@@ -1,19 +1,24 @@
-Capitolo Introduttivo: Modelli basati sull’ energia
+#Reti Di Hopfield
+
+##Capitolo Introduttivo: Modelli basati sull’ energia
 Fonte: http://yann.lecun.com/exdb/publis/pdf/lecun-06.pdf
+
 L’obiettivo principale dei modelli statistici e dell’apprendimento automatico è quello di trovare una dipendenza tra le variabili. Una volta individuata, questa correlazione può essere usata per trovare risposte su una nuova e sconosciuta variabile sottoposta.
 I modelli basati sull’energia, catturano queste dipendenze assegnando un grado di energia a ogni configurazione di variabili, cioè ogni possibile assegnamento di valor dato alle variabili. 
+
 In questi modelli:
 	Fare inferenza (una predizione o il prendere una decisione) consisterà quindi nel settare il valore delle variabili conosciute, e trovare di conseguenza il valore delle rimanenti variabili secondo il criterio di minimizzazione dell’energia complessiva. 
 	Fare apprendimento: significa trovare una funzione di energia che associ, un basso livello di energia a valori corretti delle variabili e uno alto ai valori sbagliati. 
 	La funzione di perdita: viene minimizzata durante la fase di apprendimento e serve a misurare la qualità della funzione di energia presa in considerazione (trovare quella che fitta meglio i dati).
 
-Appunto non strettamente necessario:
+######Appunto non strettamente necessario:
 “Nei problemi statistici vi è bisogno di una costante di normalizzazione, cioè una costante che riduce qualsiasi funzione di probabilità, ad una funzione di densità di probabilità con probabilità totale = 1. Nei sistemi a energia globale questa costante non viene usata e ciò permette di avere un design del modello più flessibile.”
 
 
-Reti di Hopfield: modelli per l’immagazzinamento di memorie 
+##Reti di Hopfield: modelli per l’immagazzinamento di memorie 
 Fonte: https://www.coursera.org/learn/neural-networks/lecture/9ZOr2/hopfield-nets-13-min
 + Slide del Dipartimento di informatica UniTO.
+
 Nel 1982 John Hopfield, fisico, professore di chimica e biologia, introdusse le reti di Hopfield, che sono l’esempio più semplice di modelli basati sull’ energia. 
 Utilizzo: immagazzinamento di memorie e ricostruzione di pattern, cioè una volta immagazzinata una memoria se vengono sottoposte ad un input corrispondente quella stessa memoria ma parzialmente corrotto o incompleto, la rete riesce a ripristinare il dato originale. Le memorie che salviamo sono dette: memorie fondamentali. 
 Si compongono di Neuroni (unita binarie) completamente connessi tra loro. Essendo unità non-lineari tutte connesse, sono difficili da analizzare perché possono comportarsi in modi differenti, possono:
@@ -39,16 +44,16 @@ E al risultato si sottrae la stessa formula con un valore passivo di Sj (ovvero 
 
 
 
-Teorema di Convergenza: 
+##Teorema di Convergenza: 
 Per ogni stato iniziale, la rete convergerà sempre ad uno stato stabile.
 	Ogni rete ha N unità binarie, quindi possono esserci sono 2^Npossibili stati (quindi un numero finito di stati)
 	Ogni stato è associato ad un valore di energia globale
 	Il cambiamento di stato può solo tendere verso un abbassamento dell’energia, se non si può diminuire non si cambia lo stato
 
-Algoritmo
+##Algoritmo di apprendimento
 Si parte da una configurazione random di stati e si aggiornano man a mano gli stati dei neuroni (con il criterio di minimizzazione dell’energia globale) fino a quando non si raggiunge uno stato stabile in cui i neuroni non cambiano più gli stati (non si può minimizzare ulteriormente). Il teorema di convergenza ci da certezza che si arriverà sempre ad uno stato stabile.
 
-Esempio pratico di una rete di Hopfield:
+######Esempio pratico di una rete di Hopfield:
 	Data una rete con i pesi assegnati, trovare la migliore configurazione di neuroni possibile (assegnare i valori di attivazione dei neuroni in modo tale da minimizzare l’energia complessiva della rete)
  
 	Si inizializzano i neuroni ad uno stato random (1 o 0 i possibili valori assegnabili)
@@ -87,7 +92,7 @@ Il minimo globale invece sarebbe questo, al quale non potevamo arrivare partendo
 L’ aggiornamento degli stati dei neuroni non può essere parallelizzato, deve procedere in modo asincrono o si rischia di avere delle oscillazioni.
 La proposta di Hopfield è di usare questi modelli per immagazzinare memorie facendo corrispondere quello stato a quello di energia minima, cosicché anche se si dovesse corrompere l’informazione, la rete tenderebbe naturalmente a tornare in quello stato (o anche in caso di informazioni parziali fornite da ricostruire). Inoltre, questi modelli sono fault tollerant, ovvero continuano a lavorare anche se una parte della rete si danneggia o viene a mancare, il risultato prodotto può essere ancora accettabile.
 
-Come immagazzino le informazioni nella rete?
+##Come immagazzino le informazioni nella rete?
 L’input che forniamo alla rete corrisponde ad un vettore di N elementi (dove N corrisponderà poi al numero dei neuroni della rete) dove ogni elemento avrà valore 1 o -1, oppure 1 o 0 (valori che avranno anche poi i neuroni). Durante l’addestramento i pesi dei collegamenti dovranno essere settati in modo da rendere favorevole l’attivazione dei neuroni corrispondenti agli elementi del vettore e rendere cioè quella configurazione, uno dei minimi energetici.
 L’output sarà lo stesso un vettore sempre di N elementi il più possibile vicino a quello di input.
 Il principio si ispira alla biologia: le sinapsi che collegano neuroni attivi/spenti contemporaneamente sono più forti, quindi pesi maggiori per i collegamenti di neuroni con lo stesso grado di attivazione e minori per quelli di gradi di attivazione differente (ovvero il collegamento tra un neurone attivo ed uno spento sarà minore).
@@ -101,7 +106,7 @@ La formula è guidata dagli errori, quindi non si basa sul verificare il risulta
 La formula per neuro di tipo 1 o 0 è un leggermente più complicata:
  
 
-Capacità di immagazzinamento delle informazioni
+##Capacità di immagazzinamento delle informazioni
 La capacità di una rete totalmente connessa, con N unità è solo di 0.14N memorie fondamentali immagazzinabili prima che la rete si sovraccarichi e inizi a confonderle e fare errori.
 Perché accade ciò?
 
@@ -113,16 +118,14 @@ Non era ben chiaro però quanto unlearning si dovesse fare.
 Oltre a rimuove i minimi spuri, ci sono altri modi per aumentare le capacità della rete? 
 Si, invece di immagazzinare tutto il vettore dati in un colpo solo si possono ciclare più fasi di apprendimento. Usando la procedura di convergenza del percettrone per addestrare ogni unità al suo corretto stato conoscendo il valore di tutti gli altri elementi del vettore dati.
 
-Epilogo
-Nota: Crick and Mitchison proposero che il processo di unlearning potrebbe essere ciò che succede nel nostro cervello durante la fase REM (Rapid Eyes Movement). Ovvero, durante il giorno noi acquisiamo un sacco di nuove informazioni (e otteniamo dei minimi spuri) e durante la notte disimpariamo (il che spiegherebbe perché non memorizziamo “l’esperienza” che viviamo durante i sogni e ce li dimentichiamo, a parte quelli che abbiamo poco prima di svegliarci, in quanto memorizzati nella memoria a breve termine).
-  
+##Epilogo
 
-Lati positivi di queste reti:
+######Lati positivi di queste reti:
 	Completano pattern parziali
 	Sono fault tolerant: anche se alcune connessioni si danneggiano, un risultato viene comunque prodotto e spesso è accettabile.
 	Posso estrarre prototipi di informazione, ovvero il modo in cui codificano una memoria fondamentale in uno stato stabile. 
 	Il modo in cui apprendono è simile a ciò che accade nel nostro cervello.
-Lati negativi:
+######Lati negativi:
 	Non sempre uno stato stabile è una memoria fondamentale, esistono stati spuri
 	L’ opposto di uno stato stabile, è ancora uno stato stabile
 	Anche le combinazioni di stati stabili lo sono
@@ -133,13 +136,4 @@ N/2logN
 
 
 
-
-
-
- 
-
-
-
-
-
-
+######Nota: Crick and Mitchison proposero che il processo di unlearning potrebbe essere ciò che succede nel nostro cervello durante la fase REM (Rapid Eyes Movement). Ovvero, durante il giorno noi acquisiamo un sacco di nuove informazioni (e otteniamo dei minimi spuri) e durante la notte disimpariamo (il che spiegherebbe perché non memorizziamo “l’esperienza” che viviamo durante i sogni e ce li dimentichiamo, a parte quelli che abbiamo poco prima di svegliarci, in quanto memorizzati nella memoria a breve termine).
